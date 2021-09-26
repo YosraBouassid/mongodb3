@@ -1,0 +1,206 @@
+MongoDB shell version v3.6.8
+connecting to: mongodb://127.0.0.1:27017
+Implicit session: session { "id" : UUID("dbeb23ec-9a79-4b12-b09b-657a273f8dc9") }
+MongoDB server version: 3.6.8
+Server has startup warnings: 
+2021-09-26T11:20:42.156+0100 I STORAGE  [initandlisten] 
+2021-09-26T11:20:42.156+0100 I STORAGE  [initandlisten] ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
+2021-09-26T11:20:42.156+0100 I STORAGE  [initandlisten] **          See http://dochub.mongodb.org/core/prodnotes-filesystem
+2021-09-26T11:20:42.983+0100 I CONTROL  [initandlisten] 
+2021-09-26T11:20:42.983+0100 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2021-09-26T11:20:42.983+0100 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2021-09-26T11:20:42.983+0100 I CONTROL  [initandlisten] 
+> use contact
+switched to db contact
+> db
+contact
+> db.createCollection('contactlist')
+{ "ok" : 1 }
+> show collections
+contactlist
+> show dbs
+admin       0.000GB
+config      0.000GB
+contact     0.000GB
+ecom-udemy  0.000GB
+ecommerce   0.000GB
+local       0.000GB
+> db
+contact
+> db.contactlist.insert({LastName:"Ben Lahmer",FirstName:"Fares",Email:"fares@gmail.com",age:26})
+WriteResult({ "nInserted" : 1 })
+> db.contactlist.insertMany([{LastName:"Kefi",FirstName:"Seif",Email:"Kefi@gmail.com",age:15},{LastName:"Fatnassi",FirstName:"Sarra",Email:"sarra.f@gmail.com",age:40}])
+{
+	"acknowledged" : true,
+	"insertedIds" : [
+		ObjectId("61504b1244bf438e29eec81f"),
+		ObjectId("61504b1244bf438e29eec820")
+	]
+}
+> db.contactlist.find().pretty()
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec81f"),
+	"LastName" : "Kefi",
+	"FirstName" : "Seif",
+	"Email" : "Kefi@gmail.com",
+	"age" : 15
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec820"),
+	"LastName" : "Fatnassi",
+	"FirstName" : "Sarra",
+	"Email" : "sarra.f@gmail.com",
+	"age" : 40
+}
+> db.contactlist.insertMany([{LastName:"Ben Yahia",FirstName:"Rym",age:4},{LastName:"Cherif",FirstName:"Sami",age:3}])
+{
+	"acknowledged" : true,
+	"insertedIds" : [
+		ObjectId("61504b4344bf438e29eec821"),
+		ObjectId("61504b4344bf438e29eec822")
+	]
+}
+> db.contactlist.find().pretty()
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec81f"),
+	"LastName" : "Kefi",
+	"FirstName" : "Seif",
+	"Email" : "Kefi@gmail.com",
+	"age" : 15
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec820"),
+	"LastName" : "Fatnassi",
+	"FirstName" : "Sarra",
+	"Email" : "sarra.f@gmail.com",
+	"age" : 40
+}
+{
+	"_id" : ObjectId("61504b4344bf438e29eec821"),
+	"LastName" : "Ben Yahia",
+	"FirstName" : "Rym",
+	"age" : 4
+}
+{
+	"_id" : ObjectId("61504b4344bf438e29eec822"),
+	"LastName" : "Cherif",
+	"FirstName" : "Sami",
+	"age" : 3
+}
+> 
+> db.contactlist.find({_id" : ObjectId("61504b0644bf438e29eec81e")}).pretty()
+2021-09-26T11:31:28.838+0100 E QUERY    [thread1] SyntaxError: missing : after property id @(shell):1:24
+> db.contactlist.find({"_id" : ObjectId("61504b0644bf438e29eec81e")}).pretty()
+
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+> db.contactlist.find({age:{$gt:18}}).pretty()
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec820"),
+	"LastName" : "Fatnassi",
+	"FirstName" : "Sarra",
+	"Email" : "sarra.f@gmail.com",
+	"age" : 40
+}
+> db.contactlist.find({$and:[{age:{$gt:18}},{LastName:{$regex:/.*ah*/}}]}).pretty()
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec820"),
+	"LastName" : "Fatnassi",
+	"FirstName" : "Sarra",
+	"Email" : "sarra.f@gmail.com",
+	"age" : 40
+}
+> db.contactlist.updateOne({LastName:"Kefi"},{$set:{FirstName:"Anis"}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.contactlist.find().pretty()
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec81f"),
+	"LastName" : "Kefi",
+	"FirstName" : "Anis",
+	"Email" : "Kefi@gmail.com",
+	"age" : 15
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec820"),
+	"LastName" : "Fatnassi",
+	"FirstName" : "Sarra",
+	"Email" : "sarra.f@gmail.com",
+	"age" : 40
+}
+{
+	"_id" : ObjectId("61504b4344bf438e29eec821"),
+	"LastName" : "Ben Yahia",
+	"FirstName" : "Rym",
+	"age" : 4
+}
+{
+	"_id" : ObjectId("61504b4344bf438e29eec822"),
+	"LastName" : "Cherif",
+	"FirstName" : "Sami",
+	"age" : 3
+}
+> db.contactlist.deleteMany({age:{$lt:5}})
+{ "acknowledged" : true, "deletedCount" : 2 }
+> db.contactlist.find().pretty()
+{
+	"_id" : ObjectId("61504b0644bf438e29eec81e"),
+	"LastName" : "Ben Lahmer",
+	"FirstName" : "Fares",
+	"Email" : "fares@gmail.com",
+	"age" : 26
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec81f"),
+	"LastName" : "Kefi",
+	"FirstName" : "Anis",
+	"Email" : "Kefi@gmail.com",
+	"age" : 15
+}
+{
+	"_id" : ObjectId("61504b1244bf438e29eec820"),
+	"LastName" : "Fatnassi",
+	"FirstName" : "Sarra",
+	"Email" : "sarra.f@gmail.com",
+	"age" : 40
+}
+
